@@ -1,0 +1,77 @@
+package com.tss.policy.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.tss.policy.dto.PolicyRequestDto;
+import com.tss.policy.dto.PolicyResponseDto;
+import com.tss.policy.dto.PolicyResponsePage;
+import com.tss.policy.entity.Policy;
+import com.tss.policy.service.PolicyService;
+
+@RestController
+@RequestMapping("/policyapp")
+public class PolicyController {
+
+	@Autowired
+	private PolicyService policyService;
+
+	@GetMapping("/policies")
+	public ResponseEntity<PolicyResponsePage> readAllPolicies(@RequestParam(defaultValue = "10") int pagesize,
+			@RequestParam(defaultValue = "0") int pageno) {
+		return ResponseEntity
+				.ok(policyService.readAllPolicies(org.springframework.data.domain.PageRequest.of(pageno, pagesize)));
+	}
+
+	@PostMapping("/policies")
+	public ResponseEntity<PolicyResponseDto> addNewPolicy(@RequestBody PolicyRequestDto policy) {
+		return ResponseEntity.ok(policyService.addNewPolicy(policy));
+	}
+
+	@GetMapping("/policies/{id}")
+	public ResponseEntity<Policy> readPolicyById(@PathVariable Long id) {
+		return ResponseEntity.of(policyService.findById(id));
+	}
+
+	@GetMapping("/policies/number")
+	public ResponseEntity<Policy> getPolicyByNumber(@RequestParam String policyNumber) {
+		return ResponseEntity.of(policyService.findByPolicyNumber(policyNumber));
+	}
+
+	@DeleteMapping("/policies/{id}")
+	public ResponseEntity<String> deletePolicyById(@PathVariable Long id) {
+		policyService.deletePolicy(id);
+		return ResponseEntity.ok("Policy deleted successfully with ID: " + id);
+	}
+
+	@DeleteMapping("/policies/number")
+	public ResponseEntity<String> deletePolicyByNumber(@RequestParam String policyNumber) {
+		policyService.deleteByPolicyNumber(policyNumber);
+		return ResponseEntity.ok("Policy deleted successfully with number: " + policyNumber);
+	}
+
+	@GetMapping("/policies/holder")
+	public ResponseEntity<List<Policy>> getPoliciesByHolder(@RequestParam String holderName,
+			@RequestParam(defaultValue = "0") int pageno, @RequestParam(defaultValue = "10") int pagesize) {
+		return ResponseEntity.ok(policyService
+				.findByHolderName(holderName, org.springframework.data.domain.PageRequest.of(pageno, pagesize))
+				.getContent());
+	}
+
+	@GetMapping("/policies/duration")
+	public ResponseEntity<List<Policy>> getPoliciesByDuration(@RequestParam int years,
+			@RequestParam(defaultValue = "0") int pageno, @RequestParam(defaultValue = "10") int pagesize) {
+		return ResponseEntity.ok(policyService.findPoliciesWithDurationLessThan(years,
+				org.springframework.data.domain.PageRequest.of(pageno, pagesize)).getContent());
+	}
+}
