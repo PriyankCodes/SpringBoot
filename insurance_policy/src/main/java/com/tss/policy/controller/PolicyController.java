@@ -19,6 +19,8 @@ import com.tss.policy.dto.PolicyResponsePage;
 import com.tss.policy.entity.Policy;
 import com.tss.policy.service.PolicyService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/policyapp")
 public class PolicyController {
@@ -34,7 +36,7 @@ public class PolicyController {
 	}
 
 	@PostMapping("/policies")
-	public ResponseEntity<PolicyResponseDto> addNewPolicy(@RequestBody PolicyRequestDto policy) {
+	public ResponseEntity<PolicyResponseDto> addNewPolicy(@Valid @RequestBody PolicyRequestDto policy) {
 		return ResponseEntity.ok(policyService.addNewPolicy(policy));
 	}
 

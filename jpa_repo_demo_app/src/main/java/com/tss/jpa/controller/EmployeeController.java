@@ -1,39 +1,41 @@
 package com.tss.jpa.controller;
 
-import java.util.List;
-import java.util.Optional;
+import com.tss.jpa.dto.EmployeeRequestDto;
+import com.tss.jpa.dto.EmployeeResponseDto;
+import com.tss.jpa.service.EmployeeService;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.tss.jpa.entity.Employee;
-import com.tss.jpa.service.EmployeeService;
+import java.util.List;
 
 @RestController
 @RequestMapping("/employeeapp")
 public class EmployeeController {
 
-    @Autowired
-    private EmployeeService employeeService;
+	@Autowired
+	private EmployeeService employeeService;
 
-    @GetMapping("/employees")
-    public ResponseEntity<List<Employee>> readAllEmployees() {
-        return ResponseEntity.ok(employeeService.readAllEmployees());
-    }
+	@GetMapping("/employees")
+	public ResponseEntity<List<EmployeeResponseDto>> readAllEmployees() {
+		return ResponseEntity.ok(employeeService.readAllEmployees());
+	}
 
-    @PostMapping("/employees")
-    public ResponseEntity<Employee> addNewEmployee(@RequestBody Employee employee) {
-        return ResponseEntity.ok().header("Author", "Priyank").body(employeeService.addNewEmployee(employee));
-    }
+	@PostMapping("/employees")
+	public ResponseEntity<EmployeeResponseDto> addNewEmployee(
+			@Valid @RequestBody EmployeeRequestDto employeeRequestDto) {
+		return ResponseEntity.ok().header("Author", "Priyank").body(employeeService.addNewEmployee(employeeRequestDto));
+	}
 
-    @GetMapping("/employees/{id}")
-    public ResponseEntity<Optional<Employee>> readEmployeeById(@PathVariable int id) {
-        return ResponseEntity.ok(employeeService.readEmployeeById(id));
-    }
+	@GetMapping("/employees/{id}")
+	public ResponseEntity<EmployeeResponseDto> readEmployeeById(@PathVariable int id) {
+		return ResponseEntity.ok(employeeService.readEmployeeById(id));
+	}
 
-    @GetMapping("/employees/name")
-    public ResponseEntity<List<Employee>> getEmployeesByName(@RequestParam String name) {
-        return ResponseEntity.ok(employeeService.readEmployeesByName(name));
-    }
+	@GetMapping("/employees/name")
+	public ResponseEntity<List<EmployeeResponseDto>> getEmployeesByName(@RequestParam String name) {
+		return ResponseEntity.ok(employeeService.readEmployeesByName(name));
+	}
 }

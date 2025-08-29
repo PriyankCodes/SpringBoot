@@ -1,4 +1,4 @@
-package com.tss.jpa.exception;
+package com.tss.policy.exception;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,20 +9,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.tss.jpa.error.ResponseError;
+import com.tss.policy.error.ResponseError;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
-	@ExceptionHandler(StudentApiException.class)
-	public ResponseEntity<ResponseError> handleStudentException(StudentApiException exception) {
-		ResponseError error = new ResponseError();
-		error.setMessage(exception.getMessage());
-		error.setStatus(HttpStatus.NOT_FOUND.value());
-		error.setTimeStamp(System.currentTimeMillis());
-
-		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {

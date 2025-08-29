@@ -1,16 +1,13 @@
 package com.tss.jpa.service;
 
-import java.util.List;
-import java.util.Optional;
+import com.tss.jpa.dto.EmployeeRequestDto;
+import com.tss.jpa.dto.EmployeeResponseDto;
 
-import com.tss.jpa.entity.Employee;
+import java.util.List;
 
 public interface EmployeeService {
-
-    List<Employee> readAllEmployees();
-    Employee addNewEmployee(Employee employee);
-    Optional<Employee> readEmployeeById(int id);
-
-    List<Employee> readEmployeesByName(String name);
-
+    List<EmployeeResponseDto> readAllEmployees();
+    EmployeeResponseDto addNewEmployee(EmployeeRequestDto employeeRequestDto);
+    EmployeeResponseDto readEmployeeById(int id);
+    List<EmployeeResponseDto> readEmployeesByName(String name);
 }

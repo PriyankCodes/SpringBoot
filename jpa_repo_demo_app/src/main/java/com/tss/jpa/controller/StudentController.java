@@ -19,6 +19,8 @@ import com.tss.jpa.dto.StudentResponsePage;
 import com.tss.jpa.entity.Student;
 import com.tss.jpa.service.StudentService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/studentapp")
 public class StudentController {
@@ -33,7 +35,7 @@ public class StudentController {
 	}
 
 	@PostMapping("/students")
-	public StudentResponseDto addNewStudent(@RequestBody StudentRequestDto student) {
+	public StudentResponseDto addNewStudent(@Valid @RequestBody StudentRequestDto student) {
 		return studentService.addNewStudent(student);
 	}
 
