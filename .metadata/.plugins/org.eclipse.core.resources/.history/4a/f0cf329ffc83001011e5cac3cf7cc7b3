@@ -1,0 +1,13 @@
+package com.tss.policy.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Data
+public class PolicyRequestDto {
+
+	
+}

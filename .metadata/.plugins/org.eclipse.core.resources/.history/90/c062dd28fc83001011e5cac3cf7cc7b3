@@ -1,0 +1,9 @@
+package com.tss.policy.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.tss.policy.entity.Policy;
+
+public class PolicyRepository extends JpaRepository<Policy, Integer> {
+
+}

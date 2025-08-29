@@ -1,0 +1,26 @@
+package com.tss.policy.service;
+
+import com.tss.policy.entity.Policy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.Optional;
+
+public interface PolicyService {
+
+    Policy createPolicy(Policy policy);
+
+    Policy updatePolicy(Long id, Policy updatedPolicy);
+
+    void deletePolicy(Long id);
+
+    Optional<Policy> findById(Long id);
+
+    Optional<Policy> findByPolicyNumber(String policyNumber);
+
+    Page<Policy> findByHolderName(String holderName, Pageable pageable);
+
+    Page<Policy> findAll(Pageable pageable);
+
+    Page<Policy> findPoliciesWithDurationLessThan(int years, Pageable pageable);
+}

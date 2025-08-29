@@ -1,0 +1,16 @@
+package com.tss.policy.repository;
+
+import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.tss.policy.entity.Policy;
+
+public interface PolicyRepository extends JpaRepository<Policy, int> {
+
+	void deleteByPolicyNumber(String policyNumber);
+
+	Page<Policy> findByHolderName(String holderName, Pageable pageable);
+}

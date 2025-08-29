@@ -1,0 +1,105 @@
+package com.tss.policy.service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import com.tss.policy.dto.PolicyRequestDto;
+import com.tss.policy.dto.PolicyResponseDto;
+import com.tss.policy.dto.PolicyResponsePage;
+import com.tss.policy.entity.Policy;
+import com.tss.policy.repository.PolicyRepository;
+
+@Service
+public class PolicyServiceImpl implements PolicyService {
+
+    @Autowired
+    private PolicyRepository policyRepo;
+
+    @Override
+    public PolicyResponsePage readAllPolicies(Pageable pageable) {
+        Page<Policy> policyPage = policyRepo.findAll(pageable);
+
+        PolicyResponsePage response = new PolicyResponsePage();
+        response.setTotalElements(policyPage.getTotalElements());
+        response.setSize(policyPage.getSize());
+        response.setTotalPages(policyPage.getTotalPages());
+        response.setLastPage(policyPage.isLast());
+
+        List<PolicyResponseDto> contents = new ArrayList<>();
+        for (Policy policy : policyPage.getContent()) {
+            contents.add(policyToPolicyResponseDto(policy));
+        }
+        response.setContents(contents);
+
+        return response;
+    }
+
+    @Override
+    public PolicyResponseDto addNewPolicy(PolicyRequestDto policyDto) {
+        Policy policy = policyRequestDtoToPolicy(policyDto);
+        Policy dbPolicy = policyRepo.save(policy);
+        return policyToPolicyResponseDto(dbPolicy);
+    }
+
+    @Override
+    public Optional<Policy> findByPolicyNumber(String policyNumber) {
+        return policyRepo.findByPolicyNumber(policyNumber);
+    }
+
+    @Override
+    public Page<Policy> findByHolderName(String holderName, Pageable pageable) {
+        return policyRepo.findByHolderName(holderName, pageable);
+    }
+
+    @Override
+    public Policy createPolicy(Policy policy) {
+        return policyRepo.save(policy);
+    }
+
+    @Override
+    public void deletePolicy(int id) {
+        if (!policyRepo.existsById(id)) {
+            throw new RuntimeException("Policy not found with id " + id);
+        }
+        policyRepo.deleteById(id);
+    }
+
+    @Override
+    public Optional<Policy> findById(Long id) {
+        return policyRepo.findById(id);
+    }
+
+    @Override
+    public Page<Policy> findAll(Pageable pageable) {
+        return policyRepo.findAll(pageable);
+    }
+
+    @Override
+    public Page<Policy> findPoliciesWithDurationLessThan(int years, Pageable pageable) {
+
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    private Policy policyRequestDtoToPolicy(PolicyRequestDto dto) {
+        Policy policy = new Policy();
+        policy.setHolderName(dto.getHolderName());
+        policy.setStartDate(dto.getStartDate());
+        policy.setEndDate(dto.getEndDate());
+        policy.setAmount(dto.getAmount());
+        return policy;
+    }
+
+    private PolicyResponseDto policyToPolicyResponseDto(Policy policy) {
+        PolicyResponseDto dto = new PolicyResponseDto();
+        dto.setPolicyNumber(policy.getPolicyNumber());
+        dto.setHolderName(policy.getHolderName());
+        dto.setAmount(policy.getAmount());
+        return dto;
+    }
+}

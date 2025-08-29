@@ -1,0 +1,31 @@
+package com.tss.policy.service;
+
+import com.tss.policy.dto.PolicyRequestDto;
+import com.tss.policy.dto.PolicyResponseDto;
+import com.tss.policy.dto.PolicyResponsePage;
+import com.tss.policy.entity.Policy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.Optional;
+
+public interface PolicyService {
+
+    Policy createPolicy(Policy policy);
+
+
+    void deletePolicy(Long id);
+
+    Optional<Policy> findById(Long id);
+
+
+    Page<Policy> findByHolderName(String holderName, Pageable pageable);
+
+    Page<Policy> findAll(Pageable pageable);
+
+    Page<Policy> findPoliciesWithDurationLessThan(int years, Pageable pageable);
+
+	PolicyResponsePage readAllPolicies(Pageable pageable);
+
+	PolicyResponseDto addNewPolicy(PolicyRequestDto policyDto);
+}

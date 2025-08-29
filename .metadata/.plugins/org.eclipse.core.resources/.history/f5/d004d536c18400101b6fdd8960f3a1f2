@@ -1,0 +1,37 @@
+package com.tss.jpa.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.tss.jpa.entity.Employee;
+import com.tss.jpa.repository.EmployeeRepository;
+
+@Service
+public class EmployeeServiceImpl implements EmployeeService {
+
+    @Autowired
+    private EmployeeRepository employeeRepo;
+
+    @Override
+    public List<Employee> readAllEmployees() {
+        return employeeRepo.findAll();
+    }
+
+    @Override
+    public Employee addNewEmployee(Employee employee) {
+        return employeeRepo.save(employee);
+    }
+
+    @Override
+    public Optional<Employee> readEmployeeById(int id) {
+        return employeeRepo.findById(id);
+    }
+    
+    @Override
+    public List<Employee> readEmployeesByName(String name) {
+        return employeeRepo.findByName(name);
+    }
+}

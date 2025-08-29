@@ -1,0 +1,4 @@
+2025/08/29-14:23:43.388 2f3c Reusing MANIFEST C:\Users\priyank.fichadiya\Desktop\SpringAssignment\hello_spring_app\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Session Storage/MANIFEST-000001
+2025/08/29-14:23:43.392 2f3c Recovering log #3
+2025/08/29-14:23:43.394 2f3c (ignoring error) C:\Users\priyank.fichadiya\Desktop\SpringAssignment\hello_spring_app\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Session Storage/000003.log: dropping 577 bytes; Corruption: checksum mismatch
+2025/08/29-14:23:43.398 2f3c Reusing old log C:\Users\priyank.fichadiya\Desktop\SpringAssignment\hello_spring_app\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Session Storage/000003.log 

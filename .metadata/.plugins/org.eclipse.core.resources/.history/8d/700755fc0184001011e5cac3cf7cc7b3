@@ -1,0 +1,121 @@
+package com.tss.policy.service;
+
+import com.tss.policy.dto.PolicyRequestDto;
+import com.tss.policy.dto.PolicyResponseDto;
+import com.tss.policy.dto.PolicyResponsePage;
+import com.tss.policy.entity.Policy;
+import com.tss.policy.exception.PolicyNotFoundException;
+import com.tss.policy.repository.PolicyRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class PolicyServiceImpl implements PolicyService {
+
+    @Autowired
+    private PolicyRepository policyRepo;
+
+    @Override
+    public PolicyResponsePage readAllPolicies(Pageable pageable) {
+        Page<Policy> policyPage = policyRepo.findAll(pageable);
+
+        PolicyResponsePage response = new PolicyResponsePage();
+        response.setTotalElements(policyPage.getTotalElements());
+        response.setSize(policyPage.getSize());
+        response.setTotalPages(policyPage.getTotalPages());
+        response.setLastPage(policyPage.isLast());
+
+        List<PolicyResponseDto> contents = new ArrayList<>();
+        for (Policy policy : policyPage.getContent()) {
+            contents.add(policyToDto(policy));
+        }
+        response.setContents(contents);
+
+        return response;
+    }
+
+    @Override
+    @Transactional
+    public PolicyResponseDto addNewPolicy(PolicyRequestDto dto) {
+        Policy policy = dtoToPolicy(dto);
+        Policy saved = policyRepo.save(policy);
+        return policyToDto(saved);
+    }
+
+    @Override
+    public Optional<Policy> findByPolicyNumber(String policyNumber) {
+        return policyRepo.findByPolicyNumber(policyNumber);
+    }
+
+    @Override
+    @Transactional
+    public void deleteByPolicyNumber(String policyNumber) {
+        if (!policyRepo.findByPolicyNumber(policyNumber).isPresent()) {
+            throw new PolicyNotFoundException("Policy not found with number: " + policyNumber);
+        }
+        policyRepo.deleteByPolicyNumber(policyNumber);
+    }
+
+    @Override
+    public Page<Policy> findByHolderName(String holderName, Pageable pageable) {
+        return policyRepo.findByHolderName(holderName, pageable);
+    }
+
+    @Override
+    @Transactional
+    public Policy createPolicy(Policy policy) {
+        return policyRepo.save(policy);
+    }
+
+    @Override
+    public Optional<Policy> findById(Long id) {
+        return policyRepo.findById(id);
+    }
+
+    @Override
+    @Transactional
+    public void deletePolicy(Long id) {
+        if (!policyRepo.existsById(id)) {
+            throw new PolicyNotFoundException("Policy not found with ID: " + id);
+        }
+        policyRepo.deleteById(id);
+    }
+
+    @Override
+    public Page<Policy> findAll(Pageable pageable) {
+        return policyRepo.findAll(pageable);
+    }
+
+    @Override
+    public Page<Policy> findPoliciesWithDurationLessThan(int years, Pageable pageable) {
+        LocalDate cutoffDate = LocalDate.now().plusYears(years);
+        return policyRepo.findByEndDateBefore(cutoffDate, pageable);
+    }
+
+    // ---------------- Mapping helpers ----------------
+    private Policy dtoToPolicy(PolicyRequestDto dto) {
+        Policy policy = new Policy();
+        policy.setHolderName(dto.getHolderName());
+        policy.setStartDate(dto.getStartDate());
+        policy.setEndDate(dto.getEndDate());
+        policy.setAmount(dto.getAmount());
+        return policy;
+    }
+
+    private PolicyResponseDto policyToDto(Policy policy) {
+        PolicyResponseDto dto = new PolicyResponseDto();
+        dto.setPolicyNumber(policy.getPolicyNumber());
+        dto.setHolderName(policy.getHolderName());
+        dto.setAmount(policy.getAmount());
+        return dto;
+    }
+}

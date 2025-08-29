@@ -1,0 +1,65 @@
+package com.tss.policy.service;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import com.tss.policy.entity.Policy;
+import com.tss.policy.repository.PolicyRepository;
+
+@Service
+public class PolicyServiceImpl implements PolicyService {
+
+    @Autowired
+    private PolicyRepository policyRepo;
+
+    @Override
+    public Policy createPolicy(Policy policy) {
+        return policyRepo.save(policy);
+    }
+
+    @Override
+    public Policy updatePolicy(Long id, Policy updatedPolicy) {
+        return policyRepo.findById(id)
+                .map(existingPolicy -> {
+                    existingPolicy.setHolderName(updatedPolicy.getHolderName());
+                    existingPolicy.setStartDate(updatedPolicy.getStartDate());
+                    existingPolicy.setEndDate(updatedPolicy.getEndDate());
+                    existingPolicy.setAmount(updatedPolicy.getAmount());
+                    return policyRepo.save(existingPolicy);
+                })
+                .orElseThrow(() -> new RuntimeException("Policy not found with id " + id));
+    }
+
+    @Override
+    public void deletePolicy(Long id) {
+        if (policyRepo.existsById(id)) {
+            policyRepo.deleteById(id);
+        } else {
+            throw new RuntimeException("Policy not found with id " + id);
+        }
+    }
+
+    @Override
+    public Optional<Policy> findById(Long id) {
+        return policyRepo.findById(id);
+    }
+
+    @Override
+    public Optional<Policy> findByPolicyNumber(String policyNumber) {
+        return policyRepo.findByPolicyNumber(policyNumber);
+    }
+
+    @Override
+    public Page<Policy> findByHolderName(String holderName, Pageable pageable) {
+        return policyRepo.findByHolderNameContainingIgnoreCase(holderName, pageable);
+    }
+
+    @Override
+    public Page<Policy> findAll(Pageable pageable) {
+        return policyRepo.findAll(pageable);
+    }
+}

@@ -1,0 +1,44 @@
+package com.tss.jpa.controller;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.tss.jpa.entity.Student;
+import com.tss.jpa.service.StudentService;
+
+@RestController
+@RequestMapping("/studentapp")
+public class StudentController {
+
+    @Autowired
+    private StudentService studentService;
+
+    // ✅ Get all students
+    @GetMapping("/students")
+    public ResponseEntity<List<Student>> readAllStudents() {
+        List<Student> students = studentService.readAllStudents();
+        return ResponseEntity.ok(students);
+    }
+
+    @PostMapping("/students")
+    public Student addNewStudent(@RequestBody Student student) {
+        return studentService.addNewStudent(student);
+    }
+
+    @GetMapping("/students/{studentId}")
+    public ResponseEntity<Student> readStudentById(@PathVariable int studentId) {
+        Optional<Student> student = studentService.readStudentById(studentId);
+        return student.map(ResponseEntity::ok)
+                      .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/students/name")
+    public ResponseEntity<List<Student>> getStudentsByName(@RequestParam(required = false) String firstName) {
+        List<Student> students = studentService.readStudentsByName(firstName);
+        return ResponseEntity.ok(students);
+    }
+}

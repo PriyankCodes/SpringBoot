@@ -1,0 +1,12 @@
+package com.tss.policy.dto;
+
+import java.time.LocalDate;
+
+public class PolicyResponseDto {
+
+	private String policyNumber;
+	private String holderName;
+	private LocalDate startDate;
+	private LocalDate endDate;
+	private double amount;
+}

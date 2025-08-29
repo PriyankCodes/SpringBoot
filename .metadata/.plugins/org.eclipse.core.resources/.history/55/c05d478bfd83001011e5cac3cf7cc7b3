@@ -1,0 +1,15 @@
+package com.tss.policy.service;
+
+import java.util.Optional;
+
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.data.domain.Page;
+
+import com.tss.policy.entity.Policy;
+
+public interface PolicyService {
+
+	Optional<Policy> findByPolicyNumber(String policyNumber);
+
+	Page<Policy> findByHolderNameContainingIgnoreCase(String holderName, Pageable pageable);
+}

@@ -1,0 +1,39 @@
+package com.tss.jpa.controller;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.tss.jpa.entity.Employee;
+import com.tss.jpa.service.EmployeeService;
+
+@RestController
+@RequestMapping("/employeeapp")
+public class EmployeeController {
+
+    @Autowired
+    private EmployeeService employeeService;
+
+    @GetMapping("/employees")
+    public ResponseEntity<List<Employee>> readAllEmployees() {
+        return ResponseEntity.ok(employeeService.readAllEmployees());
+    }
+
+    @PostMapping("/employees")
+    public Employee addNewEmployee(@RequestBody Employee employee) {
+        return employeeService.addNewEmployee(employee);
+    }
+
+    @GetMapping("/employees/{id}")
+    public ResponseEntity<Optional<Employee>> readEmployeeById(@PathVariable int id) {
+        return ResponseEntity.ok(employeeService.readEmployeeById(id));
+    }
+
+    @GetMapping("/employees/name")
+    public ResponseEntity<List<Employee>> getEmployeesByName(@RequestParam String name) {
+        return ResponseEntity.ok(employeeService.readEmployeesByName(name));
+    }
+}

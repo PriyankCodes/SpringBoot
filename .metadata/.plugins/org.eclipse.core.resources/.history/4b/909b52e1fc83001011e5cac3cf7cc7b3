@@ -1,0 +1,12 @@
+package com.tss.policy.dto;
+
+import java.util.List;
+
+public class PolicyResponsePage {
+
+	private List<PolicyResponseDto> contents;
+	private long totalElements;
+	private int size;
+	private boolean isLastPage;
+	private int totalPages;
+}

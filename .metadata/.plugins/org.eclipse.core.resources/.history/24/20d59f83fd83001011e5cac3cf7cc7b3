@@ -1,0 +1,6 @@
+package com.tss.policy.service;
+
+public interface PolicyService {
+
+	
+}

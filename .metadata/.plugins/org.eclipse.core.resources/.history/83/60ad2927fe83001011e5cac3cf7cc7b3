@@ -1,0 +1,33 @@
+package com.tss.policy.service;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.data.domain.Page;
+
+import com.tss.policy.entity.Policy;
+import com.tss.policy.repository.PolicyRepository;
+
+public class PolicyServiceImpl implements PolicyService {
+
+	@Autowired
+	private PolicyRepository policyRepo;
+	
+	@Override
+	public Optional<Policy> findByPolicyNumber(String policyNumber) {
+
+        return policyRepo.findByPolicyNumber(policyNumber);
+
+
+		return Optional.empty();
+	}
+
+	@Override
+	public Page<Policy> findByHolderName(String holderName, Pageable pageable) {
+
+
+		return null;
+	}
+
+}

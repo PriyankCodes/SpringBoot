@@ -1,0 +1,12 @@
+package com.tss.jpa.config;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class AppConfig {
+
+	ModelMapper mapper() {
+		
+	}
+}
